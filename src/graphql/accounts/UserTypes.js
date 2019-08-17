@@ -28,6 +28,17 @@ const userTypes = gql`
     email : String
     domain : String
   }
+
+  input NewUserInput {
+    name : String!
+    email : String!
+    password: String!
+    address : String!
+    phone : String!
+    role: String!
+    domain : String!
+  }
+
 `;
 
 export default userTypes;

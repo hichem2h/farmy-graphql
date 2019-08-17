@@ -3,6 +3,7 @@ import { MONGO_URI } from './config';
 
 export default function connectDatabase() {
     return new Promise((resolve, reject) => {
+        mongoose.Promise = global.Promise;
         mongoose.connection
           .on('error', error => reject(error))
           .on('close', () => console.error('#### Database connection closed.'))

@@ -1,5 +1,4 @@
-// @flow
-import userResolvers from './user/UserResolvers';
+import accountsResolvers from './accounts/Resolvers';
 import problemResolvers from './problem/ProblemResolvers';
 
 
@@ -7,16 +6,17 @@ const globalResolvers = {
   Query: {
     problems: problemResolvers.problems,  
     problem: problemResolvers.problem,
-    me: userResolvers.me,
+    me: accountsResolvers.me,
   },
 
   Mutation: {
-    register: userResolvers.register,
-    login: userResolvers.login,
+    register: accountsResolvers.register,
+    login: accountsResolvers.login,
+    refresh: accountsResolvers.refresh,
     problemAdd: problemResolvers.problemAdd,
   },
 
-  User: userResolvers.User,
+  User: accountsResolvers.User,
   Problem: problemResolvers.Problem,
 };
 

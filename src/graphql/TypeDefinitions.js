@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server';
-import userTypes from './user/UserTypes';
+import userTypes from './accounts/UserTypes';
 import problemTypes from './problem/ProblemTypes';
 
 
@@ -11,8 +11,9 @@ const queryTypes = gql`
   }
 
   type Mutation {
-    register(name: String!, email: String!, password: String!): UserAuth
+    register(user: NewUserInput): UserAuth
     login(email: String!, password: String!): UserAuth
+    refresh(token: String!): UserAuth
     problemAdd(title: String!, description: String): Problem
   }
 `;

@@ -2,7 +2,7 @@ import { ApolloServer } from 'apollo-server';
 import connectDatabase from './database';
 import globalQuery from './graphql/TypeDefinitions';
 import globalResolvers from './graphql/GlobalResolvers';
-import { getUser } from './graphql/utils'
+import jwt from './graphql/accounts/jwt'
 
 
 (async () => {
@@ -18,12 +18,16 @@ import { getUser } from './graphql/utils'
   const server = new ApolloServer({
     typeDefs: globalQuery,
     resolvers: globalResolvers,
+    debug: false,
     context: async ({ req }) => {
       const token = req.headers.authorization ? req.headers.authorization : '';
-      const { user } = await getUser(token);
-      return {
-        user,
-      };
+      
+      if(token) {
+        const user = await jwt.getUser(token);
+        return {
+          user,
+        }
+      }
     },
   });
 
