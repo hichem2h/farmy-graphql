@@ -1,12 +1,12 @@
 import { gql } from 'apollo-server';
 
 
-const problemTypes = gql`
-  type Problem {
+const types = gql`
+  type Anomaly {
     id: ID
     title : String
     description : String
-    farmer : Farmer
+    farmer : User
     createdAt : String
     images : [Image]
     solution : Solution
@@ -27,10 +27,11 @@ const problemTypes = gql`
   }
 
   type ExpertSolution {
-    expert : Expert
+    expert : User
     disease : String
     description : String
+    treatement: String
   }
 `;
 
-export default problemTypes;
+export default types;

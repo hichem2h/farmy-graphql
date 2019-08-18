@@ -5,10 +5,7 @@ import { AuthenticationError, ValidationError } from 'apollo-server';
 
 const resolvers = {
   User: {
-    __resolveType: (obj, context, info) => {
-      if (obj.role == 'expert') return 'Expert'
-      else if (obj.role == 'farmer') return 'Farmer'
-    },
+
   },
 
   me: (obj, args, context) => context.user,

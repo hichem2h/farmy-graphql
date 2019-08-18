@@ -1,23 +1,25 @@
 import accountsResolvers from './accounts/Resolvers';
-import problemResolvers from './problem/ProblemResolvers';
+import anomaliesResolvers from './anomalies/Resolvers';
 
 
 const globalResolvers = {
   Query: {
-    problems: problemResolvers.problems,  
-    problem: problemResolvers.problem,
     me: accountsResolvers.me,
+
+    anomalies: anomaliesResolvers.anomalies,  
+    anomaly: anomaliesResolvers.anomaly,
   },
 
   Mutation: {
     register: accountsResolvers.register,
     login: accountsResolvers.login,
     refresh: accountsResolvers.refresh,
-    problemAdd: problemResolvers.problemAdd,
+
+    anomalyAdd: anomaliesResolvers.anomalyAdd,
   },
 
   User: accountsResolvers.User,
-  Problem: problemResolvers.Problem,
+  Anomaly: anomaliesResolvers.Anomaly,
 };
 
 export default globalResolvers;

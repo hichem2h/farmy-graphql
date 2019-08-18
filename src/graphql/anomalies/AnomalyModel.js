@@ -25,7 +25,7 @@ const Schema = new mongoose.Schema(
         },
         solution: {
             model: {
-                disease: String,
+                diseases: [String],
                 confidence: Number,
             },
             experts: [
@@ -34,8 +34,9 @@ const Schema = new mongoose.Schema(
                         type: mongoose.Schema.Types.ObjectId,
                         ref: 'User',
                     },
+                    diseases: [String],
                     description: String,
-                    phytosanitaryProduct: String,
+                    treatement: String,
                 }
             ]
         },
@@ -49,7 +50,7 @@ const Schema = new mongoose.Schema(
 );
 
 Schema.statics = {
-    getProblems(user) {
+    getAnomalies(user) {
         if (user.role == 'farmer') {
             return this.find({ farmer: user }).populate('farmer').populate('solution.experts.expert');
         }
@@ -58,14 +59,14 @@ Schema.statics = {
         }
     },
 
-    getProblem(user, id) {
+    getAnomaly(user, id) {
         if (user.role == 'farmer') {
             return this.findOne({ _id: id, farmer: user }).populate('farmer').populate('solution.experts.expert');
         }
         else if (user.role == 'expert') {
-            return ProblemModel.findOne({ _id: id }).populate('farmer').populate('solution.experts.expert');
+            return this.findOne({ _id: id }).populate('farmer').populate('solution.experts.expert');
         }
     }
 };
 
-export default mongoose.model('Problem', Schema);
+export default mongoose.model('Anomaly', Schema);

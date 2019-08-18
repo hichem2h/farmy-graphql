@@ -1,23 +1,25 @@
 import { gql } from 'apollo-server';
 import userTypes from './accounts/UserTypes';
-import problemTypes from './problem/ProblemTypes';
+import anomalyTypes from './anomalies/AnomalyTypes';
 
 
 const queryTypes = gql`
   type Query {
-    problems(solvedByExpert:Boolean) : [Problem]
-    problem(id:ID) : Problem
     me : User
+
+    anomalies(solved:Boolean) : [Anomaly]
+    anomaly(id:ID) : Anomaly
   }
 
   type Mutation {
     register(user: NewUserInput): UserAuth
     login(email: String!, password: String!): UserAuth
     refresh(token: String!): UserAuth
-    problemAdd(title: String!, description: String): Problem
+
+    anomalyAdd(title: String!, description: String): Anomaly
   }
 `;
 
-const globalQuery = [problemTypes, userTypes, queryTypes];
+const globalQuery = [anomalyTypes, userTypes, queryTypes];
 
 export default globalQuery;

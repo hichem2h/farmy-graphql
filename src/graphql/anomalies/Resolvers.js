@@ -1,24 +1,24 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server'
-import ProblemModel from './ProblemModel';
+import AnomalyModel from './AnomalyModel';
 
 
 const resolvers = {
-    Problem: {
+    Anomaly: {
 
     },
 
-    problems: (obj, args, context) => {
+    anomalies: (obj, args, context) => {
         const { user } = context;
 
         if (!user) {
             throw new AuthenticationError('Unauthenticated');
         }
 
-        const problems = ProblemModel.getProblems(user)
-        return problems;
+        const anomalies = AnomalyModel.getAnomalies(user)
+        return anomalies;
     },
 
-    problem: (obj, args, context) => {
+    anomaly: (obj, args, context) => {
         const { id } = args
         const { user } = context;
 
@@ -26,12 +26,12 @@ const resolvers = {
             throw new AuthenticationError('Unauthenticated');
         }
 
-        const problem = ProblemModel.getProblem(user, id)
+        const anomaly = AnomalyModel.getAnomaly(user, id)
 
-        return problem;
+        return anomaly;
     },
 
-    problemAdd: async (obj, args, context) => {
+    anomalyAdd: async (obj, args, context) => {
         const { title, description } = args;
         const { user } = context;
 
@@ -43,15 +43,15 @@ const resolvers = {
             throw new ForbiddenError('Unauthorized')
         }
 
-        const problem = new ProblemModel({
+        const anomaly = new AnomalyModel({
             title,
             description,
             farmer: user._id,
         });
 
-        await problem.save();
+        await anomaly.save();
 
-        return problem;
+        return anomaly;
     },
 }
 

@@ -1,32 +1,18 @@
 import { gql } from 'apollo-server';
 
 
-const userTypes = gql`
-  interface User {
+const types = gql`
+  type User {
     name : String
     address : String
     phone : String
     email : String
+    role : String
+    domain : String
   }
 
   type UserAuth {
     token: String
-  }
-
-  type Farmer implements User {
-    name : String
-    address : String
-    phone : String
-    email : String
-    cropType : String
-  }
-
-  type Expert implements User {
-    name : String
-    address : String
-    phone : String
-    email : String
-    domain : String
   }
 
   input NewUserInput {
@@ -41,4 +27,4 @@ const userTypes = gql`
 
 `;
 
-export default userTypes;
+export default types;
