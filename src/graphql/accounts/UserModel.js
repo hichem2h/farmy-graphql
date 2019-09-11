@@ -32,6 +32,12 @@ const Schema = new mongoose.Schema(
     },
     domain: {
       type: String,
+      required: false
+    },
+    expertise: {
+      type: [String],
+      required: false,
+      default: []
     }
   },
   {
@@ -39,10 +45,10 @@ const Schema = new mongoose.Schema(
       createdAt: 'createdAt',
       updatedAt: 'updatedAt',
     },
-  },
+  }
 );
 
-Schema.plugin(uniqueValidator, {message: 'Email {VALUE} is already used'});
+Schema.plugin(uniqueValidator, { message: 'Email {VALUE} is already used' });
 
 Schema.pre('save', function (next) {
   // Hash the password
@@ -59,13 +65,13 @@ Schema.methods = {
   },
 };
 
-Schema.statics.authenticate = async function(email, password) {
+Schema.statics.authenticate = async function (email, password) {
   const user = await this.findOne({
     email: email.toLowerCase(),
   });
 
-  if(user) {
-    if(bcrypt.compareSync(password, user.password)) {
+  if (user) {
+    if (bcrypt.compareSync(password, user.password)) {
       return user
     }
   } else {
@@ -75,13 +81,13 @@ Schema.statics.authenticate = async function(email, password) {
   return null
 };
 
-Schema.statics.validateEmail = async function(email, password) {
-  
+Schema.statics.validateEmail = async function (email, password) {
+
   const checkEmail = await this.findOne({
     email,
   });
 
-  if(checkEmail) {
+  if (checkEmail) {
     return false
   } else {
     return true

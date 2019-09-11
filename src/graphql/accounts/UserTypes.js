@@ -2,6 +2,7 @@ import { gql } from 'apollo-server';
 
 
 const types = gql`
+  
   type User {
     name : String
     address : String
@@ -9,6 +10,7 @@ const types = gql`
     email : String
     role : String
     domain : String
+    expertise : [String]
   }
 
   type UserAuth {

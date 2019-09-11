@@ -9,13 +9,20 @@ const resolvers = {
 
     anomalies: (obj, args, context) => {
         const { user } = context;
+        const { solved } = args;
 
         if (!user) {
             throw new AuthenticationError('Unauthenticated');
         }
+        if (solved)
+            return AnomalyModel.getAnomalies(user)
+        else {
+            if (user.role === 'expert')
+                return AnomalyModel.getAnomalies()
+            else
+                throw new ForbiddenError('Unauthorized')
+        }
 
-        const anomalies = AnomalyModel.getAnomalies(user)
-        return anomalies;
     },
 
     anomaly: (obj, args, context) => {
@@ -39,7 +46,7 @@ const resolvers = {
             throw new AuthenticationError('Unauthenticated');
         }
 
-        if (user.role != 'farmer') {
+        if (user.role != 'expert') {
             throw new ForbiddenError('Unauthorized')
         }
 
@@ -53,6 +60,20 @@ const resolvers = {
 
         return anomaly;
     },
+    addSolution: async (obj, args, context) => {
+        const { user } = context;
+        const { id, solution } = args;
+
+        if (!user) {
+            throw new AuthenticationError('Unauthenticated');
+        }
+
+        if (user.role != 'expert') {
+            throw new ForbiddenError('Unauthorized')
+        }
+
+        return await AnomalyModel.addSolution(user, id, solution);
+    }
 }
 
 export default resolvers
