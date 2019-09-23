@@ -3,6 +3,7 @@ import connectDatabase from './database';
 import globalQuery from './graphql/TypeDefinitions';
 import globalResolvers from './graphql/GlobalResolvers';
 import jwt from './graphql/accounts/jwt'
+import fs from 'fs'
 
 
 (async () => {
@@ -29,6 +30,13 @@ import jwt from './graphql/accounts/jwt'
         }
       }
     },
+  });
+
+  fs.mkdir('uploads', { recursive: true }, (err) => {
+    if (err) {
+      console.error("#### Unable to create uploads folder");
+      process.exit(1);
+    };
   });
 
   server.listen().then(({ url }) => {

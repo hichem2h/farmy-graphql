@@ -33,6 +33,12 @@ const types = gql`
     treatement: String
   }
 
+  input NewAnomalyInput {
+    images: [Upload!]
+    title: String!
+    description: String!
+  }
+
   input inputExpertSolution {
     diseases: [String!]!
     description: String

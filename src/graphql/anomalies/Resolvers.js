@@ -1,5 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server'
 import AnomalyModel from './AnomalyModel';
+import { processImages } from './utils'
 
 
 const resolvers = {
@@ -39,27 +40,31 @@ const resolvers = {
     },
 
     anomalyAdd: async (obj, args, context) => {
-        const { title, description } = args;
+        const { title, description, images } = args.anomaly;
         const { user } = context;
 
         if (!user) {
             throw new AuthenticationError('Unauthenticated');
         }
 
-        if (user.role != 'expert') {
+        if (user.role != 'farmer') {
             throw new ForbiddenError('Unauthorized')
         }
+
+        const links = await processImages(images)
 
         const anomaly = new AnomalyModel({
             title,
             description,
             farmer: user._id,
+            images: links
         });
 
         await anomaly.save();
 
         return anomaly;
     },
+
     addSolution: async (obj, args, context) => {
         const { user } = context;
         const { id, solution } = args;

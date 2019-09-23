@@ -16,8 +16,8 @@ const queryTypes = gql`
     login(email: String!, password: String!): UserAuth
     refresh(token: String!): UserAuth
 
-    anomalyAdd(title: String!, description: String): Anomaly
-    solutionAdd(id: String!,solution:inputExpertSolution!): Boolean
+    anomalyAdd(anomaly: NewAnomalyInput): Anomaly
+    solutionAdd(id: String!, solution:inputExpertSolution!): Boolean
   }
 `;
 
