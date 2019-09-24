@@ -1,6 +1,7 @@
 import UserModel from './UserModel';
 import jwt from './jwt';
-import { AuthenticationError, ValidationError } from 'apollo-server';
+import { AuthenticationError, ValidationError, UserInputError } from 'apollo-server';
+import { getValidationErrors } from '../../utils';
 
 
 const resolvers = {
@@ -47,8 +48,9 @@ const resolvers = {
 
     try {
       await newUser.save();
-    } catch (err) {
-      throw new ValidationError(err);
+    } catch (error) {
+      if (error.name != 'ValidationError') throw error
+      throw new UserInputError("Bad User Input", { validationErrors: getValidationErrors(error) });
     }
 
     return {
@@ -64,7 +66,13 @@ const resolvers = {
         throw new AuthenticationError('Unauthenticated');
     }
 
-    const updatedUser = await UserModel.findOneAndUpdate({ _id: user.id }, { ...profile }, { new: true, useFindAndModify: false })
+    try {
+      const updatedUser = await UserModel.findOneAndUpdate({ _id: user.id }, { ...profile }, { new: true, useFindAndModify: false })
+    } catch (error) {
+      if (error.name != 'ValidationError') throw error
+      throw new UserInputError("Bad User Input", { validationErrors: getValidationErrors(error) });
+    }
+   
 
     return updatedUser
   }

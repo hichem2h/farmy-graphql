@@ -32,7 +32,7 @@ const Schema = new mongoose.Schema(
     },
     domain: {
       type: String,
-      required: false
+      required: true
     },
     expertise: {
       type: [String],
@@ -81,18 +81,5 @@ Schema.statics.authenticate = async function (email, password) {
   return null
 };
 
-Schema.statics.validateEmail = async function (email, password) {
-
-  const checkEmail = await this.findOne({
-    email,
-  });
-
-  if (checkEmail) {
-    return false
-  } else {
-    return true
-  }
-
-};
 
 export default mongoose.model('User', Schema);
