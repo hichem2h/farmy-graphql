@@ -1,6 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server'
 import AnomalyModel from './AnomalyModel';
-import { processImages } from './utils'
+import { processImages } from './imageUtils'
 import { PubSub } from 'apollo-server';
 
 const pubsub = new PubSub();

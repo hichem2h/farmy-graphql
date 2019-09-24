@@ -20,6 +20,10 @@ import fs from 'fs'
     typeDefs: globalQuery,
     resolvers: globalResolvers,
     debug: false,
+    uploads: {
+      maxFileSize: 2000000, // 2 MB
+      maxFiles: 5
+    },
     context: async ({ req, connection }) => {
       if (connection) {
         return connection.context;

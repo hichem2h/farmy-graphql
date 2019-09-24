@@ -1,7 +1,7 @@
 import UserModel from './UserModel';
 import jwt from './jwt';
 import { AuthenticationError, ValidationError, UserInputError } from 'apollo-server';
-import { getValidationErrors } from '../../utils';
+import { getValidationErrors } from '../utils';
 
 
 const resolvers = {
