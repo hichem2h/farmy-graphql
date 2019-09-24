@@ -66,8 +66,8 @@ const resolvers = {
     },
 
     addSolution: async (obj, args, context) => {
-        const { user } = context;
         const { id, solution } = args;
+        const { user } = context;
 
         if (!user) {
             throw new AuthenticationError('Unauthenticated');

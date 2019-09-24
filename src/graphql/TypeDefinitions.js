@@ -12,12 +12,12 @@ const queryTypes = gql`
   }
 
   type Mutation {
-    register(user: NewUserInput): UserAuth
+    register(user: NewUserInput!): UserAuth
     login(email: String!, password: String!): UserAuth
     refresh(token: String!): UserAuth
 
-    anomalyAdd(anomaly: NewAnomalyInput): Anomaly
-    solutionAdd(id: String!, solution:inputExpertSolution!): Boolean
+    anomalyAdd(anomaly: NewAnomalyInput!): Anomaly
+    solutionAdd(id: ID!, solution: NewExpertSolutioninput!): Boolean
   }
 `;
 

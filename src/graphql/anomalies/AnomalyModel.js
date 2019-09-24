@@ -33,6 +33,7 @@ const Schema = new mongoose.Schema(
                     diseases: [String],
                     description: String,
                     treatement: String,
+                    _id :  { id: false }
                 }
             ]
         },
@@ -70,22 +71,20 @@ Schema.statics = {
 
     async addSolution(user, id, solution) {
 
-        let anomaly = await this.findOne({ _id: id }).populate('farmer').populate('solution.experts.expert');
+        let anomaly = await this.findById(id);
 
-        const experts = anomaly.solution.experts;
-
-        console.log(solution.diseases);
+        if(!anomaly) return false
         
-        const index = experts.map(e => e._id).indexOf(user.id);
+        let experts = anomaly.solution.experts
+        const index = experts.map(solution => solution.expert).indexOf(user.id);
 
         if (index === -1)
-            experts.push({...solution,_id:user.id});
+            experts.push({...solution, expert: user.id})
         else
-            experts[index] = {...solution,_id:user.id};
+            experts[index] = {...solution, expert: user.id}
 
-        const res = await this.updateOne({ _id: id }, { 'solution.experts': anomaly.solution.experts });
-
-        return !!res.n;
+        await anomaly.save()
+        return true
 
     }
 

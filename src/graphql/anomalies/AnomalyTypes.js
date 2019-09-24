@@ -39,7 +39,7 @@ const types = gql`
     description: String!
   }
 
-  input inputExpertSolution {
+  input NewExpertSolutioninput {
     diseases: [String!]!
     description: String
     treatement: String
