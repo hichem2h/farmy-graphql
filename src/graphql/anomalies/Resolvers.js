@@ -35,7 +35,7 @@ const resolvers = {
         return anomaly;
     },
 
-    anomalyAdd: async (obj, args, context) => {
+    addAnomaly: async (obj, args, context) => {
         const { title, description, images } = args.anomaly;
         const { user } = context;
 
@@ -73,7 +73,9 @@ const resolvers = {
             throw new ForbiddenError('Unauthorized')
         }
 
-        return await AnomalyModel.addSolution(user, id, solution);
+        anomaly = await AnomalyModel.addSolution(user, id, solution);
+
+        return anomaly;
     }
 }
 

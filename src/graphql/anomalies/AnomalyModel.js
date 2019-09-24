@@ -63,11 +63,13 @@ Schema.statics = {
     },
 
     getAnomaly(user, id) {
+
         if (user.role == 'farmer') {
             return this.findOne({ _id: id, farmer: user }).populate('farmer').populate('solution.experts.expert');
         }
-        else if (user.role == 'expert') {
-            return this.findOne({ _id: id }).populate('farmer').populate('solution.experts.expert');
+        
+        if (user.role == 'expert') {
+            return this.findOne({ _id: id }).populate('farmer')
         }
     },
 
@@ -75,7 +77,7 @@ Schema.statics = {
 
         let anomaly = await this.findById(id);
 
-        if(!anomaly) return false
+        if(!anomaly) return null
         
         let experts = anomaly.solution.experts
         const index = experts.map(solution => solution.expert).indexOf(user.id);
@@ -86,7 +88,7 @@ Schema.statics = {
             experts[index] = {...solution, expert: user.id}
 
         await anomaly.save()
-        return true
+        return anomaly
 
     }
 
