@@ -55,6 +55,19 @@ const resolvers = {
       token: jwt.generateToken(newUser),
     };
   },
+
+  updateProfile: async (obj, args, context) => {
+    const { profile } = args;
+    const { user } = context;
+
+    if (!user) {
+        throw new AuthenticationError('Unauthenticated');
+    }
+
+    const updatedUser = await UserModel.findOneAndUpdate({ _id: user.id }, { ...profile }, { new: true, useFindAndModify: false })
+
+    return updatedUser
+  }
 };
 
 export default resolvers;

@@ -14,6 +14,7 @@ const globalResolvers = {
     register: accountsResolvers.register,
     login: accountsResolvers.login,
     refresh: accountsResolvers.refresh,
+    updateProfile: accountsResolvers.updateProfile,
 
     addAnomaly: anomaliesResolvers.addAnomaly,
     addSolution: anomaliesResolvers.addSolution,

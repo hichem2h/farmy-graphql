@@ -27,6 +27,16 @@ const types = gql`
     domain : String!
   }
 
+  input UpdateProfileInput {
+    name : String
+    address : String
+    phone : String
+    email : String
+    role : String
+    domain : String
+    expertise : [String]
+  }
+
 `;
 
 export default types;
