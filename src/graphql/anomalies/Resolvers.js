@@ -9,20 +9,16 @@ const resolvers = {
     },
 
     anomalies: (obj, args, context) => {
-        const { user } = context;
         const { solved } = args;
+        const { user } = context;
 
         if (!user) {
             throw new AuthenticationError('Unauthenticated');
         }
-        if (solved)
-            return AnomalyModel.getAnomalies(user)
-        else {
-            if (user.role === 'expert')
-                return AnomalyModel.getAnomalies()
-            else
-                throw new ForbiddenError('Unauthorized')
-        }
+
+        const anomalies = AnomalyModel.getAnomalies(user, solved)
+
+        return anomalies
 
     },
 

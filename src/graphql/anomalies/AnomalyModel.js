@@ -47,16 +47,18 @@ const Schema = new mongoose.Schema(
 );
 
 Schema.statics = {
-    getAnomalies(user) {
+    getAnomalies(user, solved) {
 
-        if (!user) {
-            return this.find({ "solution.experts": [] }).populate('farmer').populate('solution.experts.expert');
-        }
-        else if (user.role == 'farmer') {
+        if (user.role == 'farmer') {
             return this.find({ farmer: user }).populate('farmer').populate('solution.experts.expert');
         }
-        else if (user.role == 'expert') {
-            return this.find().populate('farmer').populate('solution.experts.expert');
+        
+        if (user.role == 'expert') {
+            if (solved) {
+                return this.find({ "solution.experts.expert": user.id }).populate('farmer').populate('solution.experts.expert');
+            } else {
+                return this.find({ "solution.experts": [] }).populate('farmer')
+            }
         }
     },
 
