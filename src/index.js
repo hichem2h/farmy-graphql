@@ -20,13 +20,17 @@ import fs from 'fs'
     typeDefs: globalQuery,
     resolvers: globalResolvers,
     debug: false,
-    context: async ({ req }) => {
-      const token = req.headers.authorization ? req.headers.authorization : '';
-      
-      if(token) {
-        const user = await jwt.getUser(token);
-        return {
-          user,
+    context: async ({ req, connection }) => {
+      if (connection) {
+        return connection.context;
+      } else {
+        const token = req.headers.authorization ? req.headers.authorization : '';
+        
+        if(token) {
+          const user = await jwt.getUser(token);
+          return {
+            user,
+          }
         }
       }
     },
@@ -39,7 +43,8 @@ import fs from 'fs'
     };
   });
 
-  server.listen().then(({ url }) => {
+  server.listen().then(({ url, subscriptionsUrl }) => {
     console.log(`#### Server ready at ${url}`);
+    console.log(`#### Subscriptions ready at ${subscriptionsUrl}`);
   });
 })()

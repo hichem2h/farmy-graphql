@@ -20,6 +20,11 @@ const queryTypes = gql`
     addAnomaly(anomaly: NewAnomalyInput!): Anomaly
     addSolution(id: ID!, solution: NewExpertSolutioninput!): Anomaly
   }
+
+  type Subscription {
+    anomalyAdded: Anomaly
+    solutionAdded: Anomaly
+  }
 `;
 
 const globalQuery = [anomalyTypes, userTypes, queryTypes];

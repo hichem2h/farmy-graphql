@@ -20,6 +20,11 @@ const globalResolvers = {
     addSolution: anomaliesResolvers.addSolution,
   },
 
+  Subscription: {
+    anomalyAdded: anomaliesResolvers.anomalyAdded,
+    solutionAdded: anomaliesResolvers.solutionAdded,
+  },
+
   User: accountsResolvers.User,
   Anomaly: anomaliesResolvers.Anomaly,
 };

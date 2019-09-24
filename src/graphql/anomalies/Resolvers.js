@@ -1,7 +1,9 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server'
 import AnomalyModel from './AnomalyModel';
 import { processImages } from './utils'
+import { PubSub } from 'apollo-server';
 
+const pubsub = new PubSub();
 
 const resolvers = {
     Anomaly: {
@@ -58,6 +60,8 @@ const resolvers = {
 
         await anomaly.save();
 
+        pubsub.publish('ANOMALY_ADDED', { anomalyAdded: anomaly });
+
         return anomaly;
     },
 
@@ -75,7 +79,17 @@ const resolvers = {
 
         anomaly = await AnomalyModel.addSolution(user, id, solution);
 
+        pubsub.publish('SOLUTION_ADDED', { solutionAdded: anomaly });
+
         return anomaly;
+    },
+
+    anomalyAdded: {
+        subscribe: () => pubsub.asyncIterator(['ANOMALY_ADDED']),
+    },
+
+    solutionAdded: {
+        subscribe: () => pubsub.asyncIterator(['SOLUTION_ADDED']),
     }
 }
 
