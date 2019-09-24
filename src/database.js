@@ -9,7 +9,8 @@ export default function connectDatabase() {
           .on('close', () => console.error('#### Database connection closed.'))
           .once('open', () => resolve(mongoose.connections[0]));
     
-        mongoose.connect(MONGO_URI, { useNewUrlParser: true, autoIndex: false});
+        mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true,
+                                      useCreateIndex: true, useFindAndModify: false, autoIndex: false });
       });
 };
 

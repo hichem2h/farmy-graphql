@@ -48,14 +48,15 @@ const resolvers = {
 
     try {
       await newUser.save();
+      
+      return {
+        token: jwt.generateToken(newUser),
+      };
+
     } catch (error) {
       if (error.name != 'ValidationError') throw error
       throw new UserInputError("Bad User Input", { validationErrors: getValidationErrors(error) });
     }
-
-    return {
-      token: jwt.generateToken(newUser),
-    };
   },
 
   updateProfile: async (obj, args, context) => {
@@ -67,14 +68,15 @@ const resolvers = {
     }
 
     try {
-      const updatedUser = await UserModel.findOneAndUpdate({ _id: user.id }, { ...profile }, { new: true, useFindAndModify: false })
+
+      const updatedUser = await UserModel.findOneAndUpdate({ _id: user.id }, { ...profile }, { new: true })
+      return updatedUser
+
     } catch (error) {
       if (error.name != 'ValidationError') throw error
       throw new UserInputError("Bad User Input", { validationErrors: getValidationErrors(error) });
     }
-   
 
-    return updatedUser
   }
 };
 
