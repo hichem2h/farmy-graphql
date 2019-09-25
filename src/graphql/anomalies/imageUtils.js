@@ -75,7 +75,7 @@ export const processImages = async (images) => {
 
   const prediction = {
     disease: 'Basal rot',
-    confidence: 120.01
+    confidence: 99.01
   }
 
   return [ urls, prediction ]

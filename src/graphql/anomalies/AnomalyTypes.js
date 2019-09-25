@@ -18,8 +18,8 @@ const types = gql`
   }
 
   type ModelSolution {
-    disease: String
-    confidence: Int
+    diseases: [String]
+    confidence: Float
   }
 
   type ExpertSolution {
