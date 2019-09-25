@@ -10,7 +10,7 @@ const s3 = new AWS.S3({
   secretAccessKey: AWS_SECRET_ACCESS_KEY
 });
 
-const storeFs = async (image) => {
+const uploadToFs = async (image) => {
   try {
 
     const { createReadStream, filename } = await image;
@@ -37,31 +37,38 @@ const storeFs = async (image) => {
   }
 }
 
-const uploadFileToS3 = async (image) => {
-  const { createReadStream, filename } = await image;
-  const stream = createReadStream()
-  const id = shortid.generate()
-  const path = `uploads/${id}-${filename}`
+const uploadToS3 = async (image) => {
+  try {
 
-     const params = {
-         Bucket: 'testBucket',
-         Key: path,
-         Body: JSON.stringify(stream, null, 2)
-     };
+    const { createReadStream, filename } = await image;
+    const stream = createReadStream()
+    const id = shortid.generate()
+    const path = `uploads/${id}-${filename}`
 
-     s3.upload(params, function(s3Err, data) {
-         if (s3Err) throw s3Err
-         
-         return data.Location
-     });
+    const params = {
+      Bucket: 'testBucket',
+      Key: path,
+      Body: JSON.stringify(stream, null, 2)
+    };
+
+    const s3upload = s3.upload(params).promise();
+    return new Promise((resolve, reject) =>
+      s3upload
+        .then(data => {
+              resolve(data.Location)
+        })
+        .catch(error => reject(path))
+    )
+
+  } catch (error) {
+    if (error.name != 'PayloadTooLargeError') throw error
+    throw new ValidationError(error.message);
+  }
 };
 
 
 export const processImages = async (images) => {
-  const urls = await Promise.all(images.map(storeFs))
-  
-  // const myUrls = ['https://www.canalvie.com/polopoly_fs/1.1465218.1431544201!/image/tomates.jpg_gen/derivatives/cvlandscape_670_377/tomates.jpg',
-  //         'https://www.canalvie.com/polopoly_fs/1.1465218.1431544201!/image/tomates.jpg_gen/derivatives/cvlandscape_670_377/tomates.jpg']
+  const urls = await Promise.all(images.map(uploadToFs))
 
   const response = await request({ url: MODEL_URL, method: 'POST', form: myUrls})
   const prediction = JSON.parse(response).prediction
