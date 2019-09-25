@@ -8,12 +8,8 @@ const types = gql`
     description: String
     farmer: User
     createdAt: String
-    images: [Image]
+    images: [String]
     solution: Solution
-  }
-
-  type Image {
-    path: String
   }
 
   type Solution {
