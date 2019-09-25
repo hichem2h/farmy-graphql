@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "description": "Farmy AI backend",
   "scripts": {
-    "dev": "nodemon --exec babel-node src/index.js"
+    "dev": "nodemon --exec babel-node src/index.js",
+    "build": "babel ./src -d ./build",
+    "start": "node ./build/index"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime": "^7.6.2",
     "apollo-server": "^2.9.4",
     "aws-sdk": "^2.535.0",
     "bcryptjs": "^2.4.3",
@@ -18,8 +21,10 @@
     "shortid": "^2.2.15"
   },
   "devDependencies": {
+    "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
     "@babel/node": "^7.6.2",
+    "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
     "nodemon": "^1.19.2"
   }
