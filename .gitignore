@@ -2,3 +2,5 @@ node_modules/
 uploads/
 build/
 package-lock.json
+
+*.env

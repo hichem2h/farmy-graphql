@@ -3,7 +3,7 @@ import AWS from 'aws-sdk'
 import request from 'request-promise-native'
 import shortid from 'shortid'
 import { ValidationError } from 'apollo-server';
-import { AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, MODEL_URL } from '../../config'
+import { AWS_BUCKET_NAME, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, MODEL_URL } from '../../config'
 
 const s3 = new AWS.S3({
   accessKeyId: AWS_ACCESS_KEY,
@@ -46,9 +46,9 @@ const uploadToS3 = async (image) => {
     const path = `uploads/${id}-${filename}`
 
     const params = {
-      Bucket: 'testBucket',
+      Bucket: AWS_BUCKET_NAME,
       Key: path,
-      Body: JSON.stringify(stream, null, 2)
+      Body: stream
     };
 
     const s3upload = s3.upload(params).promise();
@@ -68,9 +68,9 @@ const uploadToS3 = async (image) => {
 
 
 export const processImages = async (images) => {
-  const urls = await Promise.all(images.map(uploadToFs))
+  const urls = await Promise.all(images.map(uploadToS3))
 
-  const response = await request({ url: MODEL_URL, method: 'POST', form: myUrls})
+  const response = await request({ url: MODEL_URL, method: 'POST', form: urls})
   const prediction = JSON.parse(response).prediction
 
   return [ urls, prediction ]

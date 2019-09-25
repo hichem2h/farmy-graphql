@@ -7,6 +7,7 @@ export const jwtOptions = {
     algorithm:  "HS256"
 };
 
-export const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY || '1234';
-export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || '1234';
+export const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY || '';
+export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || '';
+export const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME || ''
 export const MODEL_URL = process.env.MODEL_URL || 'http://127.0.0.1:8123'
