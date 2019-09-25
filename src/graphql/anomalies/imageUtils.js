@@ -70,8 +70,13 @@ const uploadToS3 = async (image) => {
 export const processImages = async (images) => {
   const urls = await Promise.all(images.map(uploadToS3))
 
-  const response = await request({ url: MODEL_URL, method: 'POST', form: urls})
-  const prediction = JSON.parse(response).prediction
+  // const response = await request({ url: MODEL_URL, method: 'POST', form: urls})
+  // const prediction = JSON.parse(response).prediction
+
+  const prediction = {
+    disease: 'Basal rot',
+    confidence: 120.01
+  }
 
   return [ urls, prediction ]
 }
