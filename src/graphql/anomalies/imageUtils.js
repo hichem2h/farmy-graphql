@@ -1,8 +1,9 @@
 import fs from 'fs'
 import AWS from 'aws-sdk'
+import request from 'request-promise-native'
 import shortid from 'shortid'
 import { ValidationError } from 'apollo-server';
-import { AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY } from '../../config'
+import { AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, MODEL_URL } from '../../config'
 
 const s3 = new AWS.S3({
   accessKeyId: AWS_ACCESS_KEY,
@@ -16,7 +17,7 @@ const storeFs = async (image) => {
     const stream = createReadStream()
     const id = shortid.generate()
     const path = `uploads/${id}-${filename}`
-      
+
     return new Promise((resolve, reject) =>
         stream
           .on('error', error => {
@@ -55,7 +56,15 @@ const uploadFileToS3 = async (image) => {
      });
 };
 
+
 export const processImages = async (images) => {
-  const links = await Promise.all(images.map(storeFs))
-  return links
+  const urls = await Promise.all(images.map(storeFs))
+  
+  // const myUrls = ['https://www.canalvie.com/polopoly_fs/1.1465218.1431544201!/image/tomates.jpg_gen/derivatives/cvlandscape_670_377/tomates.jpg',
+  //         'https://www.canalvie.com/polopoly_fs/1.1465218.1431544201!/image/tomates.jpg_gen/derivatives/cvlandscape_670_377/tomates.jpg']
+
+  const response = await request({ url: MODEL_URL, method: 'POST', form: myUrls})
+  const prediction = JSON.parse(response).prediction
+
+  return [ urls, prediction ]
 }

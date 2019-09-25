@@ -9,3 +9,4 @@ export const jwtOptions = {
 
 export const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY || '1234';
 export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || '1234';
+export const MODEL_URL = process.env.MODEL_URL || 'http://127.0.0.1:8123'

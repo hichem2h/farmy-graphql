@@ -49,13 +49,15 @@ const resolvers = {
             throw new ForbiddenError('Unauthorized')
         }
 
-        const links = await processImages(images)
+        const [ urls, prediction ] = await processImages(images)
 
         const anomaly = new AnomalyModel({
             title,
             description,
             farmer: user._id,
-            images: links
+            images: urls,
+            'solution.model.diseases': [prediction.disease],
+            'solution.model.confidence': prediction.confidence
         });
 
         await anomaly.save();
