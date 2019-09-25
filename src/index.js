@@ -25,6 +25,17 @@ import { PORT } from './config';
       maxFileSize: 2000000, // 2 MB
       maxFiles: 5
     },
+    subscriptions: {
+      onConnect: async (connectionParams, webSocket) => {
+        if (connectionParams.authToken) {
+          const user = await jwt.getUser(connectionParams.authToken);
+          console.log(user)
+          return {
+            user,
+          }
+        }
+      }
+    },
     context: async ({ req, connection }) => {
       if (connection) {
         return connection.context;

@@ -77,7 +77,7 @@ const resolvers = {
             throw new ForbiddenError('Unauthorized')
         }
 
-        anomaly = await AnomalyModel.addSolution(user, id, solution);
+        const anomaly = await AnomalyModel.addSolution(user, id, solution);
 
         pubsub.publish('SOLUTION_ADDED', { solutionAdded: anomaly });
 
@@ -85,11 +85,31 @@ const resolvers = {
     },
 
     anomalyAdded: {
-        subscribe: () => pubsub.asyncIterator(['ANOMALY_ADDED']),
+        subscribe: (obj, args, context) => {
+            const { user } = context;
+
+            if (!user) {
+                throw new AuthenticationError('Unauthenticated');
+            }
+
+            if (user.role != 'expert') {
+                throw new ForbiddenError('Unauthorized')
+            }
+
+            return pubsub.asyncIterator(['ANOMALY_ADDED'])
+        },
     },
 
     solutionAdded: {
-        subscribe: () => pubsub.asyncIterator(['SOLUTION_ADDED']),
+        subscribe: (obj, args, context) => {
+            const { user } = context;
+
+            if (!user) {
+                throw new AuthenticationError('Unauthenticated');
+            }
+
+            return pubsub.asyncIterator(['SOLUTION_ADDED'])
+        },
     }
 }
 
