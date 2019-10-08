@@ -24,7 +24,7 @@ const types = gql`
 
   type ExpertSolution {
     expert: User
-    disease: String
+    diseases: [String]
     description: String
     treatement: String
   }
