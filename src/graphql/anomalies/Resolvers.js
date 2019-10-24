@@ -49,7 +49,7 @@ const resolvers = {
             throw new ForbiddenError('Unauthorized')
         }
 
-        const [ urls, prediction ] = await processImages(images)
+        const [urls, prediction] = await processImages(images)
 
         const anomaly = new AnomalyModel({
             title,
@@ -84,6 +84,29 @@ const resolvers = {
         pubsub.publish('SOLUTION_ADDED', { solutionAdded: anomaly });
 
         return anomaly;
+    },
+    MarkAsSeen: async (obj, args, context) => {
+        const { id } = args;
+        const { user } = context;
+
+        if (!user) {
+            throw new AuthenticationError('Unauthenticated');
+        }
+
+        if (user.role != 'Farmer') {
+            throw new ForbiddenError('Unauthorized')
+        }
+        try {
+
+            await AnomalyModel.MarkAsSeen(id);
+            return true;
+
+        } catch (error) {
+            return false;
+
+            console.log(error);
+
+        }
     },
 
     anomalyAdded: {

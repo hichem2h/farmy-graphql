@@ -33,7 +33,12 @@ const Schema = new mongoose.Schema(
                     diseases: [String],
                     description: String,
                     treatement: String,
-                    _id :  { id: false }
+                    seen: {
+                        type: Boolean,
+                        default: false,
+                        required: false
+                    },
+                    _id: { id: false }
                 }
             ]
         },
@@ -52,7 +57,7 @@ Schema.statics = {
         if (user.role == 'farmer') {
             return this.find({ farmer: user }).populate('farmer').populate('solution.experts.expert');
         }
-        
+
         if (user.role == 'expert') {
             if (solved) {
                 return this.find({ "solution.experts.expert": user.id }).populate('farmer').populate('solution.experts.expert');
@@ -67,25 +72,29 @@ Schema.statics = {
         if (user.role == 'farmer') {
             return this.findOne({ _id: id, farmer: user }).populate('farmer').populate('solution.experts.expert');
         }
-        
+
         if (user.role == 'expert') {
             return this.findOne({ _id: id }).populate('farmer')
         }
+    },
+
+    markAsSeen(user, id) {
+        return this.update({ id: id }, { 'solution.experts[0].seen': true })
     },
 
     async addSolution(user, id, solution) {
 
         let anomaly = await this.findById(id);
 
-        if(!anomaly) return null
-        
+        if (!anomaly) return null
+
         let experts = anomaly.solution.experts
         const index = experts.map(solution => solution.expert).indexOf(user.id);
 
         if (index === -1)
-            experts.push({...solution, expert: user.id})
+            experts.push({ ...solution, expert: user.id })
         else
-            experts[index] = {...solution, expert: user.id}
+            experts[index] = { ...solution, expert: user.id }
 
         await anomaly.save()
         return anomaly

@@ -19,6 +19,7 @@ const queryTypes = gql`
 
     addAnomaly(anomaly: NewAnomalyInput!): Anomaly
     addSolution(id: ID!, solution: NewExpertSolutioninput!): Anomaly
+    MarkAsSeen(id:ID!): Boolean
   }
 
   type Subscription {
