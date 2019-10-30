@@ -78,8 +78,10 @@ Schema.statics = {
         }
     },
 
-    markAsSeen(user, id) {
-        return this.update({ id: id }, { 'solution.experts[0].seen': true })
+    async getNotifications(user, id) {
+
+        let anomalies = await this.find({ farmer: user, "solution.experts.seen": false }).populate('solution.experts.expert');
+        return anomalies.map(x => x.solution.experts[0])
     },
 
     async addSolution(user, id, solution) {

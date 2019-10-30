@@ -8,6 +8,8 @@ const globalResolvers = {
 
     anomalies: anomaliesResolvers.anomalies,  
     anomaly: anomaliesResolvers.anomaly,
+
+    notifications: anomaliesResolvers.notifications,
   },
 
   Mutation: {
@@ -18,6 +20,8 @@ const globalResolvers = {
 
     addAnomaly: anomaliesResolvers.addAnomaly,
     addSolution: anomaliesResolvers.addSolution,
+
+    markAsSeen: anomaliesResolvers.markAsSeen,
   },
 
   Subscription: {

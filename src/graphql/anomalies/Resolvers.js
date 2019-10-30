@@ -37,6 +37,23 @@ const resolvers = {
         return anomaly;
     },
 
+    notifications: async (obj, args, context) => {
+        const { id } = args
+        const { user } = context;
+
+        if (!user) {
+            throw new AuthenticationError('Unauthenticated')
+        }
+
+        if (user.role != 'farmer') {
+            throw new ForbiddenError('Unauthorized')
+        }
+
+        const notifications = await AnomalyModel.getNotifications(user, id)
+
+        return notifications;
+    },
+
     addAnomaly: async (obj, args, context) => {
         const { title, description, images } = args.anomaly;
         const { user } = context;
@@ -85,27 +102,35 @@ const resolvers = {
 
         return anomaly;
     },
-    MarkAsSeen: async (obj, args, context) => {
+
+    markAsSeen: async (obj, args, context) => {
         const { id } = args;
         const { user } = context;
 
         if (!user) {
-            throw new AuthenticationError('Unauthenticated');
+            throw new AuthenticationError('Unauthenticated')
         }
 
-        if (user.role != 'Farmer') {
+        if (user.role != 'farmer') {
             throw new ForbiddenError('Unauthorized')
         }
-        try {
 
-            await AnomalyModel.MarkAsSeen(id);
+        let anomaly = await AnomalyModel.findById(id).populate("farmer")
+        
+        if (!anomaly) return false
+
+        if (anomaly.farmer.id !== user.id) {
+            throw new ForbiddenError('Unauthorized')
+        }
+
+        try {
+            anomaly.solution.experts[0].seen = true
+            await anomaly.save()
+
             return true;
 
         } catch (error) {
-            return false;
-
-            console.log(error);
-
+            return false
         }
     },
 

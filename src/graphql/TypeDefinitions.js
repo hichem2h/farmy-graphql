@@ -9,6 +9,8 @@ const queryTypes = gql`
 
     anomalies(solved:Boolean) : [Anomaly]
     anomaly(id:ID) : Anomaly
+
+    notifications(id:ID!) : [ExpertSolution]
   }
 
   type Mutation {
@@ -19,7 +21,8 @@ const queryTypes = gql`
 
     addAnomaly(anomaly: NewAnomalyInput!): Anomaly
     addSolution(id: ID!, solution: NewExpertSolutioninput!): Anomaly
-    MarkAsSeen(id:ID!): Boolean
+
+    markAsSeen(id:ID!): Boolean
   }
 
   type Subscription {
