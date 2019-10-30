@@ -1,4 +1,6 @@
-import { ApolloServer } from 'apollo-server';
+import express from 'express'
+import http from 'http'
+import { ApolloServer } from 'apollo-server-express';
 import connectDatabase from './database';
 import globalQuery from './graphql/TypeDefinitions';
 import globalResolvers from './graphql/GlobalResolvers';
@@ -8,7 +10,7 @@ import { PORT } from './config';
 
 
 (async () => {
-  
+
   try {
     const info = await connectDatabase();
     console.log(`#### Mongodb ready at ${info.host}:${info.port}/${info.name}`);
@@ -26,6 +28,7 @@ import { PORT } from './config';
       maxFiles: 5
     },
     subscriptions: {
+      path: "/subscriptions",
       onConnect: async (connectionParams, webSocket) => {
         if (connectionParams.authToken) {
           const user = await jwt.getUser(connectionParams.authToken);
@@ -41,8 +44,8 @@ import { PORT } from './config';
         return connection.context;
       } else {
         const token = req.headers.authorization ? req.headers.authorization : '';
-        
-        if(token) {
+
+        if (token) {
           const user = await jwt.getUser(token);
           return {
             user,
@@ -59,8 +62,14 @@ import { PORT } from './config';
     };
   });
 
-  server.listen({ port: PORT }).then(({ url, subscriptionsUrl }) => {
-    console.log(`#### Server ready at ${url}`);
-    console.log(`#### Subscriptions ready at ${subscriptionsUrl}`);
+  const app = express();
+  server.applyMiddleware({ app })
+
+  const httpServer = http.createServer(app);
+  server.installSubscriptionHandlers(httpServer);
+
+  httpServer.listen({ port: PORT }, () => {
+    console.log(`#### Server ready at ${server.graphqlPath}`);
+    console.log(`#### Subscriptions ready at ${server.subscriptionsPath}`);
   });
 })()

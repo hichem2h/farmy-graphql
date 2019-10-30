@@ -1,8 +1,7 @@
 import fs from 'fs'
 import AWS from 'aws-sdk'
-import request from 'request-promise-native'
 import shortid from 'shortid'
-import { ValidationError } from 'apollo-server';
+import { ValidationError } from 'apollo-server-express';
 import { AWS_BUCKET_NAME, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, MODEL_URL } from '../../config'
 
 const s3 = new AWS.S3({

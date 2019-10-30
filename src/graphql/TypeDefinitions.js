@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { gql } from 'apollo-server-express';
 import userTypes from './accounts/UserTypes';
 import anomalyTypes from './anomalies/AnomalyTypes';
 

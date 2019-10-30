@@ -1,6 +1,6 @@
 import UserModel from './UserModel';
 import jwt from './jwt';
-import { AuthenticationError, ValidationError, UserInputError } from 'apollo-server';
+import { AuthenticationError, ValidationError, UserInputError } from 'apollo-server-express';
 import { getValidationErrors } from '../utils';
 
 
