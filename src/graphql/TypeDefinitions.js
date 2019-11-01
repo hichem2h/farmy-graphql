@@ -10,7 +10,7 @@ const queryTypes = gql`
     anomalies(solved:Boolean) : [Anomaly]
     anomaly(id:ID) : Anomaly
 
-    notifications(id:ID!) : [ExpertSolution]
+    notifications : [Anomaly]
   }
 
   type Mutation {

@@ -37,7 +37,6 @@ const resolvers = {
     },
 
     notifications: async (obj, args, context) => {
-        const { id } = args
         const { user } = context;
 
         if (!user) {
@@ -48,7 +47,7 @@ const resolvers = {
             throw new ForbiddenError('Unauthorized')
         }
 
-        const notifications = await AnomalyModel.getNotifications(user, id)
+        const notifications = await AnomalyModel.find({ farmer: user, "solution.experts.seen": false }).populate('solution.experts.expert');
 
         return notifications;
     },

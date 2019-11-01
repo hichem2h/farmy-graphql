@@ -78,12 +78,6 @@ Schema.statics = {
         }
     },
 
-    async getNotifications(user, id) {
-
-        let anomalies = await this.find({ farmer: user, "solution.experts.seen": false }).populate('solution.experts.expert');
-        return anomalies.map(x => x.solution.experts[0])
-    },
-
     async addSolution(user, id, solution) {
 
         let anomaly = await this.findById(id);
