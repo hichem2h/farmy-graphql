@@ -32,7 +32,7 @@ const Schema = new mongoose.Schema(
                     },
                     diseases: [String],
                     description: String,
-                    treatement: String,
+                    treatment: String,
                     seen: {
                         type: Boolean,
                         default: false,

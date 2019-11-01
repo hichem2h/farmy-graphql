@@ -26,7 +26,7 @@ const types = gql`
     expert: User
     diseases: [String]
     description: String
-    treatement: String
+    treatment: String
   }
 
   input NewAnomalyInput {
@@ -38,7 +38,7 @@ const types = gql`
   input NewExpertSolutioninput {
     diseases: [String!]!
     description: String
-    treatement: String
+    treatment: String
   }
 `;
 
