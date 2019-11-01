@@ -70,7 +70,11 @@ const resolvers = {
     try {
 
       const updatedUser = await UserModel.findOneAndUpdate({ _id: user.id }, { ...profile }, { new: true })
-      return updatedUser
+
+      return {
+        user: updatedUser,
+        token: jwt.generateToken(updatedUser)
+      }
 
     } catch (error) {
       if (error.name != 'ValidationError') throw error

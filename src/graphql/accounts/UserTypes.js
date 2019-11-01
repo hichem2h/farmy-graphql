@@ -17,6 +17,11 @@ const types = gql`
     token: String
   }
 
+  type UpdateProfileResponse {
+    token: String
+    user: User
+  }
+
   input NewUserInput {
     name : String!
     email : String!

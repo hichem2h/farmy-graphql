@@ -17,7 +17,7 @@ const queryTypes = gql`
     register(user: NewUserInput!): UserAuth
     login(email: String!, password: String!): UserAuth
     refresh(token: String!): UserAuth
-    updateProfile(profile: UpdateProfileInput): User
+    updateProfile(profile: UpdateProfileInput): UpdateProfileResponse
 
     addAnomaly(anomaly: NewAnomalyInput!): Anomaly
     addSolution(id: ID!, solution: NewExpertSolutioninput!): Anomaly
