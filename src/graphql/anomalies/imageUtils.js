@@ -73,7 +73,7 @@ export const processImages = async (images) => {
   // const prediction = JSON.parse(response).prediction
 
   const prediction = {
-    disease: 'Basal rot',
+    disease: 'Late Blight',
     confidence: 99.01
   }
 
