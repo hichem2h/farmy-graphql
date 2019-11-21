@@ -1,4 +1,4 @@
-import { AuthenticationError, ForbiddenError, PubSub } from 'apollo-server-express'
+import { AuthenticationError, ForbiddenError, PubSub, withFilter } from 'apollo-server-express'
 import AnomalyModel from './AnomalyModel';
 import { processImages } from './imageUtils'
 
@@ -149,15 +149,18 @@ const resolvers = {
     },
 
     solutionAdded: {
-        subscribe: (obj, args, context) => {
-            const { user } = context;
+        subscribe: withFilter (
+            () => pubsub.asyncIterator(['SOLUTION_ADDED']),
+            (payload, args, context) => {
+                const { user } = context;
 
-            if (!user) {
-                throw new AuthenticationError('Unauthenticated');
-            }
-
-            return pubsub.asyncIterator(['SOLUTION_ADDED'])
-        },
+                if (!user) {
+                    throw new AuthenticationError('Unauthenticated');
+                }
+                
+                return payload.solutionAdded.farmer.toString() === user.id;
+            },
+        )
     }
 }
 

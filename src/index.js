@@ -32,7 +32,6 @@ import { PORT } from './config';
       onConnect: async (connectionParams, webSocket) => {
         if (connectionParams.authToken) {
           const user = await jwt.getUser(connectionParams.authToken);
-          console.log(user)
           return {
             user,
           }
