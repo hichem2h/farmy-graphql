@@ -76,6 +76,7 @@ const resolvers = {
         });
 
         await anomaly.save();
+        await anomaly.populate('farmer').execPopulate();
 
         pubsub.publish('ANOMALY_ADDED', { anomalyAdded: anomaly });
 
