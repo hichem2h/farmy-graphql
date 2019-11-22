@@ -32,10 +32,19 @@ import { PORT } from './config';
       onConnect: async (connectionParams, webSocket) => {
         if (connectionParams.authToken) {
           const user = await jwt.getUser(connectionParams.authToken);
+
+          console.log('-----------------Connected: ' + user.email)
+          
           return {
             user,
           }
         }
+      },
+      onDisconnect: async (webSocket, context) => {
+        const initialContext = await context.initPromise;
+
+        console.log('-----------------Disconnected ' + initialContext.user.email)
+
       }
     },
     context: async ({ req, connection }) => {
